@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {canisterInstallCode, canisterStatus} from "$lib/providers/ic.providers";
+	import {canisterInstallCode, canisterInstallCodeFromUrl, canisterStatus} from "$lib/providers/ic.providers";
 	import {authStore} from "$lib/stores/auth.store";
 
 	const params = {
@@ -18,6 +18,7 @@
 	}
 
 	let inputWasm: HTMLInputElement | undefined;
+	let inputWasmUrl: HTMLInputElement | undefined;
 
 	const handleSubmit = async ($event: MouseEvent | TouchEvent) => {
 		$event.preventDefault();
@@ -25,6 +26,20 @@
 		try {
 			const file = inputWasm?.files[0];
 			await canisterInstallCode({...params, file});
+
+			console.log('Success');
+		} catch (err) {
+			console.error(err);
+		}
+	}
+
+	const handleSubmitUrl = async ($event: MouseEvent | TouchEvent) => {
+		$event.preventDefault();
+
+		console.log('Upload', inputWasmUrl?.value);
+
+		try {
+			await canisterInstallCodeFromUrl({...params, url: inputWasmUrl.value ?? ''});
 
 			console.log('Success');
 		} catch (err) {
@@ -43,6 +58,8 @@
 
 <button on:click={status}>Query status</button>
 
+<h2>Upload wasm</h2>
+
 <form
 		on:submit={async ($event) => await handleSubmit($event)}
 		on:keypress={($event) => {
@@ -55,5 +72,22 @@
 
 	<button type="submit">
 		Upload
+	</button>
+</form>
+
+<h2>Download wasm</h2>
+
+
+<form
+		on:submit={async ($event) => await handleSubmitUrl($event)}
+		on:keypress={($event) => {
+    $event.key === 'Enter' && $event.preventDefault();
+  }}>
+	<input
+			bind:this={inputWasmUrl}
+			type="text"/>
+
+	<button type="submit">
+		Download
 	</button>
 </form>

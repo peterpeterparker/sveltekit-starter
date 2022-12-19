@@ -51,3 +51,33 @@ export const canisterInstallCode = async ({file, canisterId, identity}: {
 		}
 	)
 }
+
+const downloadWasm = async (src: string): Promise<Blob> => {
+	const wasm: Response = await fetch(src);
+	return wasm.blob();
+};
+
+export const canisterInstallCodeFromUrl = async ({url, canisterId, identity}: {
+	url: string,
+	canisterId: string;
+	identity: Identity;
+}): Promise<void> => {
+	const actor: ICActor = await getICActor(identity);
+
+	const arg = IDL.encode([], []);
+
+	const wasmBlob = await downloadWasm(url);
+
+	console.log(wasmBlob);
+
+	const wasm_module = [...new Uint8Array(await wasmBlob.arrayBuffer())];
+
+	return actor.install_code(
+		{
+			arg: [...new Uint8Array(arg)],
+			mode: {reinstall: null},
+			canister_id: Principal.fromText(canisterId),
+			wasm_module
+		}
+	)
+}
