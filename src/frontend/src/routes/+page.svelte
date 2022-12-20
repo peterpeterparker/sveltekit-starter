@@ -1,6 +1,7 @@
 <script lang="ts">
 	import {canisterInstallCode, canisterInstallCodeFromUrl, canisterStatus} from "$lib/providers/ic.providers";
 	import {authStore} from "$lib/stores/auth.store";
+	import {sha256} from "$lib/utils/crypto.utils";
 
 	const params = {
 		canisterId: "ryjl3-tyaaa-aaaaa-aaaba-cai",
@@ -18,6 +19,7 @@
 	}
 
 	let inputWasm: HTMLInputElement | undefined;
+	let inputWasmCheck: HTMLInputElement | undefined;
 	let inputWasmUrl: HTMLInputElement | undefined;
 
 	const handleSubmit = async ($event: MouseEvent | TouchEvent) => {
@@ -48,6 +50,13 @@
 	}
 
 	const signIn = async () => await authStore.signIn();
+
+	const hash = "d9d9e6726464e4316ed4d797a3451aba0ba41560ca04608c7eda1c45c74080eb";
+
+	const checkHash = async () => {
+		const sha = await sha256(inputWasmCheck?.files?.[0]);
+		console.log(sha === hash);
+	}
 </script>
 
 <h1>Test</h1>
@@ -91,3 +100,13 @@
 		Download
 	</button>
 </form>
+
+
+<h2>Check hash</h2>
+
+<p>Expected hash: {hash}</p>
+
+<input
+		bind:this={inputWasmCheck}
+		type="file"
+		multiple={false} on:change={checkHash}/>
