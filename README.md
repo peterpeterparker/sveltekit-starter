@@ -3,3 +3,6 @@ https://raw.githubusercontent.com/peterpeterparker/smileydapp/main/smileydapp_fr
 https://raw.githubusercontent.com/peterpeterparker/smileydapp/main/backend2.wasm
 
 https://raw.githubusercontent.com/peterpeterparker/smileydapp/main/internet_identity.wasm
+dfb64b8a1912b2d97b1056253ba6bd69f289c8effd777ed2b90acaf517b92738
+
+d9d9e6726464e4316ed4d797a3451aba0ba41560ca04608c7eda1c45c74080eb
